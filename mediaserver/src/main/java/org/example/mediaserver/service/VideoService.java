@@ -6,10 +6,10 @@ import org.example.lab.UploadVideoRequest;
 import org.example.lab.Video;
 import org.example.lab.VideoIdRequest;
 import org.example.lab.VideoServiceGrpc;
-import org.example.mediaserver.dao.CreatorDao;
-import org.example.mediaserver.dao.VideoDao;
-import org.example.mediaserver.entities.CreatorEntity;
-import org.example.mediaserver.entities.VideoEntity;
+import org.example.mediaserver.dao.repositories.CreatorRepository;
+import org.example.mediaserver.dao.repositories.VideoRepository;
+import org.example.mediaserver.dao.entities.CreatorEntity;
+import org.example.mediaserver.dao.entities.VideoEntity;
 import org.example.mediaserver.mapper.CreatorMapper;
 import org.example.mediaserver.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class VideoService extends VideoServiceGrpc.VideoServiceImplBase {
 
     @Autowired
-    private VideoDao videoDao;
+    private VideoRepository videoRepository;
 
     @Autowired
-    private CreatorDao creatorDao;
+    private CreatorRepository creatorRepository;
 
     @Autowired
     private VideoMapper videoMapper;
@@ -33,7 +33,7 @@ public class VideoService extends VideoServiceGrpc.VideoServiceImplBase {
     @Override
     public void uploadVideo(UploadVideoRequest request, StreamObserver<Video> responseObserver) {
         CreatorEntity creatorEntity = creatorMapper.fromProtoToEntity(request.getCreator());
-        creatorDao.save(creatorEntity);
+        creatorRepository.save(creatorEntity);
 
         VideoEntity videoEntity = new VideoEntity();
         videoEntity.setTitle(request.getTitle());
@@ -42,7 +42,7 @@ public class VideoService extends VideoServiceGrpc.VideoServiceImplBase {
         videoEntity.setDurationSeconds(request.getDurationSeconds());
         videoEntity.setCreator(creatorEntity);
 
-        VideoEntity savedVideo = videoDao.save(videoEntity);
+        VideoEntity savedVideo = videoRepository.save(videoEntity);
         Video video = videoMapper.fromEntityToProto(savedVideo);
 
         responseObserver.onNext(video);
@@ -51,7 +51,7 @@ public class VideoService extends VideoServiceGrpc.VideoServiceImplBase {
 
     @Override
     public void getVideo(VideoIdRequest request, StreamObserver<Video> responseObserver) {
-        VideoEntity videoEntity = videoDao.findById(request.getId());
+        VideoEntity videoEntity = videoRepository.findById(request.getId());
         if (videoEntity != null) {
             Video video = videoMapper.fromEntityToProto(videoEntity);
             responseObserver.onNext(video);

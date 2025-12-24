@@ -1,4 +1,4 @@
-package org.example.mediaserver.entities;
+package org.example.mediaserver.dao.entities;
 
 
 

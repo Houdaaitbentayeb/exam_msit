@@ -1,6 +1,6 @@
-package org.example.mediaserver.dao;
+package org.example.mediaserver.dao.repositories;
 
-import org.example.mediaserver.entities.VideoEntity;
+import org.example.mediaserver.dao.entities.VideoEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Repository
-public class VideoDao {
+public class VideoRepository {
 
     private final Map<String, VideoEntity> videos = new ConcurrentHashMap<>();
 

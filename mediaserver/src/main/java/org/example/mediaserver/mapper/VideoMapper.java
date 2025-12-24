@@ -1,7 +1,7 @@
 package org.example.mediaserver.mapper;
 
 import org.example.lab.Video;
-import org.example.mediaserver.entities.VideoEntity;
+import org.example.mediaserver.dao.entities.VideoEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

@@ -4,10 +4,10 @@ package org.example.mediaserver.service;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.example.lab.*;
-import org.example.mediaserver.dao.CreatorDao;
-import org.example.mediaserver.dao.VideoDao;
-import org.example.mediaserver.entities.CreatorEntity;
-import org.example.mediaserver.entities.VideoEntity;
+import org.example.mediaserver.dao.repositories.CreatorRepository;
+import org.example.mediaserver.dao.repositories.VideoRepository;
+import org.example.mediaserver.dao.entities.CreatorEntity;
+import org.example.mediaserver.dao.entities.VideoEntity;
 import org.example.mediaserver.mapper.CreatorMapper;
 import org.example.mediaserver.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 public class CreatorService extends CreatorServiceGrpc.CreatorServiceImplBase {
 
     @Autowired
-    private CreatorDao creatorDao;
+    private CreatorRepository creatorRepository;
 
     @Autowired
-    private VideoDao videoDao;
+    private VideoRepository videoRepository;
 
     @Autowired
     private CreatorMapper creatorMapper;
@@ -32,7 +32,7 @@ public class CreatorService extends CreatorServiceGrpc.CreatorServiceImplBase {
 
     @Override
     public void getCreator(CreatorIdRequest request, StreamObserver<Creator> responseObserver) {
-        CreatorEntity creatorEntity = creatorDao.findById(request.getId());
+        CreatorEntity creatorEntity = creatorRepository.findById(request.getId());
         if (creatorEntity != null) {
             Creator creator = creatorMapper.fromEntityToProto(creatorEntity);
             responseObserver.onNext(creator);
@@ -42,7 +42,7 @@ public class CreatorService extends CreatorServiceGrpc.CreatorServiceImplBase {
 
     @Override
     public void getCreatorVideos(CreatorIdRequest request, StreamObserver<VideoStream> responseObserver) {
-        List<VideoEntity> videos = videoDao.findByCreatorId(request.getId());
+        List<VideoEntity> videos = videoRepository.findByCreatorId(request.getId());
         List<Video> videoProtos = videos.stream()
                 .map(videoMapper::fromEntityToProto)
                 .collect(Collectors.toList());

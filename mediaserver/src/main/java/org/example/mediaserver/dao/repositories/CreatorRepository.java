@@ -1,13 +1,13 @@
-package org.example.mediaserver.dao;
+package org.example.mediaserver.dao.repositories;
 
-import org.example.mediaserver.entities.CreatorEntity;
+import org.example.mediaserver.dao.entities.CreatorEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class CreatorDao {
+public class CreatorRepository {
 
     private final Map<String, CreatorEntity> creators = new ConcurrentHashMap<>();
 

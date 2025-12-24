@@ -1,7 +1,7 @@
 package org.example.mediaserver.mapper;
 
 import org.example.lab.Creator;
-import org.example.mediaserver.entities.CreatorEntity;
+import org.example.mediaserver.dao.entities.CreatorEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 @Component
